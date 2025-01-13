@@ -10,7 +10,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-import {BrowserQRCodeReader, IScannerControls} from "@zxing/browser";
+import {BrowserQRCodeReader} from "@zxing/browser";
 
 type Permissions = "prompt" | "granted" | "denied" | "notAskedYet";
 
@@ -18,7 +18,7 @@ export default function QRCodeScanner() {
   const [permission, setPermission] = useState<Permissions>("notAskedYet");
   const [isScanning, setIsScanning] = useState(false);
   const [isCameraStarted, setIsCameraStarted] = useState(false);
-  const [scannerControl, setScannerControl] = useState<IScannerControls | null>(null);
+  // const [scannerControl, setScannerControl] = useState<IScannerControls | null>(null);
   const [result, setResult] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -86,12 +86,12 @@ export default function QRCodeScanner() {
     }
   };*/
 
-  const stopScanning = () => {
+ /* const stopScanning = () => {
     if (!scannerControl) return;
     scannerControl.stop();
     setStream(null);
     setIsScanning(false);
-  }
+  }*/
 
   const startScanning = useCallback(async () => {
     if (!stream) return;
@@ -129,7 +129,7 @@ export default function QRCodeScanner() {
         <Button disabled={isScanning} onClick={startScanning}>
           Scann
         </Button>
-        <Button disabled={!isScanning} onClick={stopScanning} className="ml-2"> Stop scanning</Button>
+        { /* <Button disabled={!isScanning} onClick={stopScanning} className="ml-2"> Stop scanning</Button> */ }
         <div className="h-4" />
         <p>Result:{result}</p>
       </div>
