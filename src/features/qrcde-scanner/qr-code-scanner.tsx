@@ -115,8 +115,10 @@ export default function QRCodeScanner() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
-      <div className="relative aspect-square w-full max-w-md rounded-2xl">
+    <div className="flex min-h-screen flex-col items-center pt-6 bg-gray-100">
+      <h1 className="text-3xl font-bold">Ticket Scanner</h1>
+      <div className="h-4" />
+      <div className="relative aspect-square rounded-2xl w-[calc(100%_-_4rem)]">
         <video
           ref={videoRef}
           className="h-full w-full rounded-xl object-cover"
@@ -126,12 +128,11 @@ export default function QRCodeScanner() {
           hidden={!isCameraStarted}
         />
         <div className="h-4" />
-        <Button disabled={isScanning} onClick={startScanning}>
+        <Button disabled={isScanning} onClick={startScanning} className="w-full h-12">
           Scann
         </Button>
         { /* <Button disabled={!isScanning} onClick={stopScanning} className="ml-2"> Stop scanning</Button> */ }
         <div className="h-4" />
-        <p>Result:{result}</p>
       </div>
 
       <Sheet open={permission === "prompt"}>
@@ -150,13 +151,13 @@ export default function QRCodeScanner() {
       </Sheet>
 
       <Sheet open={!!result}>
-        <SheetContent side="bottom">
+        <SheetContent side="bottom" className="rounded-t-2xl">
           <SheetHeader>
             <SheetTitle>QR Code Result</SheetTitle>
             <SheetDescription>{result}</SheetDescription>
           </SheetHeader>
           <div className="mt-4">
-            <Button onClick={handleOkClick}>OK</Button>
+            <Button className="w-full h-12" onClick={handleOkClick}>OK</Button>
           </div>
         </SheetContent>
       </Sheet>
