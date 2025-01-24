@@ -68,7 +68,6 @@ export default function QRCodeScanner() {
   },[stream, videoRef]);
 
   useEffect(() => {
-
     startCamera();
   }, [startCamera, permission]);
 

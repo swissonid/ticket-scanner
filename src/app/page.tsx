@@ -1,5 +1,5 @@
-import QRCodeScanner from "@/features/qrcde-scanner/qr-code-scanner";
+import {Scanner} from "@/features/qrcde-scanner/screens/scanner";
 
 export default function Home() {
-  return <QRCodeScanner />;
+  return <Scanner />
 }

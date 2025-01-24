@@ -1,0 +1,68 @@
+'use client';
+
+import { useState } from 'react';
+import { Loader2 } from 'lucide-react';
+import { ScanResult } from '../domain/scanner-result';
+import { CameraViewfinder } from '../components/camera-finder';
+import { ResultSheet } from '../components/result-sheet';
+
+export type ScannerState = 'ready' | 'scanning' | 'result' | 'error';
+
+export function Scanner() {
+  const [state, setState] = useState<ScannerState>('ready');
+  const [result, setResult] = useState<ScanResult | null>(null);
+
+  // Simulate scanning process
+  const handleScan = async () => {
+    setState('scanning');
+
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    // Simulate random success/error
+    const success = Math.random() > 0.5;
+    setResult({
+      success,
+      message: success
+        ? 'QR code scanned successfully'
+        : 'This code has already been used',
+      code: success ? 'QR123456' : undefined,
+    });
+    setState('result');
+  };
+
+  const handleReset = () => {
+    setState('ready');
+    setResult(null);
+  };
+
+  return (
+    <>
+      <CameraViewfinder>
+        {state === 'scanning' && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="rounded-full bg-white/90 p-6 backdrop-blur-sm">
+              <Loader2 className="h-6 w-6 animate-spin" />
+            </div>
+          </div>
+        )}
+      </CameraViewfinder>
+
+      <ResultSheet
+        result={result}
+        isOpen={state === 'result'}
+        onClose={handleReset}
+      />
+
+      {/* Temporary scan trigger for demo */}
+      {state === 'ready' && (
+        <button
+          onClick={handleScan}
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 rounded-md bg-black px-4 py-2 text-white"
+        >
+          Simulate Scan
+        </button>
+      )}
+    </>
+  );
+}
