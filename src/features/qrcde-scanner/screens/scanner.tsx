@@ -5,6 +5,7 @@ import { Loader2 } from 'lucide-react';
 import { ScanResult } from '../domain/scanner-result';
 import { CameraViewfinder } from '../components/camera-finder';
 import { ResultSheet } from '../components/result-sheet';
+import { QrScanner } from '../components/qr-scanner';
 
 export type ScannerState = 'ready' | 'scanning' | 'result' | 'error';
 
@@ -39,13 +40,7 @@ export function Scanner() {
   return (
     <>
       <CameraViewfinder>
-        {state === 'scanning' && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="rounded-full bg-white/90 p-6 backdrop-blur-sm">
-              <Loader2 className="h-6 w-6 animate-spin" />
-            </div>
-          </div>
-        )}
+        <QrScanner className="h-full w-full" />
       </CameraViewfinder>
 
       <ResultSheet
