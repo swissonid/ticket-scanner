@@ -6,6 +6,7 @@ import { ScanResult } from '../domain/scanner-result';
 import { CameraViewfinder } from '../components/camera-finder';
 import { ResultSheet } from '../components/result-sheet';
 import { QrScanner } from '../components/qr-scanner';
+import { provideFeedback } from '@/lib/feedback';
 
 export type ScannerState = 'ready' | 'scanning' | 'result' | 'error';
 
@@ -16,7 +17,7 @@ export function Scanner() {
   // Simulate scanning process
   const handleScan = async () => {
     setState('scanning');
-
+    provideFeedback();
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000));
 

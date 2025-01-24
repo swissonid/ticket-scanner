@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { useState, useRef, useCallback, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
+} from '@/components/ui/sheet';
 
-import {BrowserQRCodeReader} from "@zxing/browser";
+import { BrowserQRCodeReader } from '@zxing/browser';
 
-type Permissions = "prompt" | "granted" | "denied" | "notAskedYet";
+type Permissions = 'prompt' | 'granted' | 'denied' | 'notAskedYet';
 
 export default function QRCodeScanner() {
-  const [permission, setPermission] = useState<Permissions>("notAskedYet");
+  const [permission, setPermission] = useState<Permissions>('notAskedYet');
   const [isScanning, setIsScanning] = useState(false);
   const [isCameraStarted, setIsCameraStarted] = useState(false);
   // const [scannerControl, setScannerControl] = useState<IScannerControls | null>(null);
@@ -25,30 +25,29 @@ export default function QRCodeScanner() {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [error, setError] = useState<Error>();
 
-
   const checkPermission = async () => {
     try {
       const stream = await navigator.mediaDevices?.getUserMedia({
         video: {
-          facingMode: "environment", // backcamere
+          facingMode: 'environment', // backcamere
         },
       });
-      setPermission("granted");
+      setPermission('granted');
       setStream(stream);
-      return ["granted", stream, null];
+      return ['granted', stream, null];
     } catch (error) {
-      console.error("Error accessing camera:", error);
-      return ["prompt", null, error];
+      console.error('Error accessing camera:', error);
+      return ['prompt', null, error];
     }
   };
 
   const startCamera = useCallback(async () => {
-    console.log("Try to start camera");
+    console.log('Try to start camera');
     try {
-      if(!stream) {
+      if (!stream) {
         const localStream = await navigator.mediaDevices?.getUserMedia({
           video: {
-            facingMode: "environment", // backcamere
+            facingMode: 'environment', // backcamere
           },
         });
         setStream(localStream);
@@ -56,16 +55,16 @@ export default function QRCodeScanner() {
       if (videoRef.current && stream) {
         videoRef.current.srcObject = stream;
         setIsCameraStarted(true);
-        console.log("Started Camera :D");
+        console.log('Started Camera :D');
       } else
         console.log(
-            `Camera not started: stream: ${stream}, videoRef.current: ${videoRef.current}`,
+          `Camera not started: stream: ${stream}, videoRef.current: ${videoRef.current}`
         );
     } catch (error) {
-      setError(new Error("Oops! Camera failed to start!"));
-      console.error("Error accessing webcam", error);
+      setError(new Error('Oops! Camera failed to start!'));
+      console.error('Error accessing webcam', error);
     }
-  },[stream, videoRef]);
+  }, [stream, videoRef]);
 
   useEffect(() => {
     startCamera();
@@ -74,7 +73,6 @@ export default function QRCodeScanner() {
   useEffect(() => {
     checkPermission();
   }, []);
-
 
   /*const stopWebcam = () => {
     if (stream) {
@@ -85,7 +83,7 @@ export default function QRCodeScanner() {
     }
   };*/
 
- /* const stopScanning = () => {
+  /* const stopScanning = () => {
     if (!scannerControl) return;
     scannerControl.stop();
     setStream(null);
@@ -97,13 +95,16 @@ export default function QRCodeScanner() {
 
     const codeReader = new BrowserQRCodeReader();
     try {
-      console.log("Start scanning");
+      console.log('Start scanning');
       setIsScanning(true);
-      const result = await  codeReader.decodeOnceFromStream(stream, videoRef.current!)
+      const result = await codeReader.decodeOnceFromStream(
+        stream,
+        videoRef.current!
+      );
       setResult(result.getText());
     } catch (error) {
-      setError(new Error("QR code scanning error!"));
-      console.error("QR code scanning error:", error);
+      setError(new Error('QR code scanning error!'));
+      console.error('QR code scanning error:', error);
       setIsScanning(false);
     }
   }, [stream]);
@@ -114,10 +115,10 @@ export default function QRCodeScanner() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center pt-6 bg-gray-100">
+    <div className="flex min-h-screen flex-col items-center bg-gray-100 pt-6">
       <h1 className="text-3xl font-bold">Ticket Scanner</h1>
       <div className="h-4" />
-      <div className="relative aspect-square rounded-2xl w-[calc(100%_-_4rem)]">
+      <div className="relative aspect-square w-[calc(100%_-_4rem)] rounded-2xl">
         <video
           ref={videoRef}
           className="h-full w-full rounded-xl object-cover"
@@ -127,14 +128,18 @@ export default function QRCodeScanner() {
           hidden={!isCameraStarted}
         />
         <div className="h-4" />
-        <Button disabled={isScanning} onClick={startScanning} className="w-full h-12">
+        <Button
+          disabled={isScanning}
+          onClick={startScanning}
+          className="h-12 w-full"
+        >
           Scann
         </Button>
-        { /* <Button disabled={!isScanning} onClick={stopScanning} className="ml-2"> Stop scanning</Button> */ }
+        {/* <Button disabled={!isScanning} onClick={stopScanning} className="ml-2"> Stop scanning</Button> */}
         <div className="h-4" />
       </div>
 
-      <Sheet open={permission === "prompt"}>
+      <Sheet open={permission === 'prompt'}>
         <SheetContent side="bottom">
           <SheetHeader>
             <SheetTitle>Camera Permission</SheetTitle>
@@ -156,12 +161,14 @@ export default function QRCodeScanner() {
             <SheetDescription>{result}</SheetDescription>
           </SheetHeader>
           <div className="mt-4">
-            <Button className="w-full h-12" onClick={handleOkClick}>OK</Button>
+            <Button className="h-12 w-full" onClick={handleOkClick}>
+              OK
+            </Button>
           </div>
         </SheetContent>
       </Sheet>
 
-      {permission === "denied" && (
+      {permission === 'denied' && (
         <div className="mt-4 text-red-500">
           Camera permission denied. Please enable camera access in your browser
           settings.
