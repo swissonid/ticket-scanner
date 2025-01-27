@@ -27,7 +27,14 @@ export function AudioSwitch({
         Scanner Audio {isAudioEnabled ? 'an' : 'aus'}
       </p>
       <Switch onClick={handleClick} checked={isAudioEnabled} />
-      <audio id="scanner-beep" src="/sounds/scanner-beep.mp3" hidden />
+      <audio
+        id="scanner-beep"
+        src="/sounds/scanner-beep.mp3"
+        hidden
+        autoPlay={false}
+        //@ts-ignore
+        disableRemotePlayback
+      />
     </div>
   );
 }
