@@ -35,7 +35,7 @@ function InfoBanner() {
   return (
     <div className="mt-8 w-full max-w-md p-4">
       <div className="flex h-[4.5rem] items-center gap-3 rounded-2xl bg-white/90 p-4 backdrop-blur-sm">
-        <ScanQrCode className="size-6 flex-shrink-0" />
+        <ScanQrCode className="size-8 flex-shrink-0 text-primary" />
         <p className="text-sm">
           Scanne den QR-Code auf dem Gutschein um ihn den Entwertungsprozess zu
           beginnen
