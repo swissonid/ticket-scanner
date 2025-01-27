@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useImperativeHandle } from 'react';
 import { ScanResult } from '../domain/scanner-result';
 import { CameraViewfinder } from '../components/camera-finder';
 import { ResultSheet } from '../components/result-sheet';
 import { QrScanner } from '../components/qr-scanner';
 import { AudioSwitch } from '../components/audio-switch';
+import { IScannerControls } from '@zxing/browser';
 
 export type ScannerState = 'ready' | 'scanning' | 'result' | 'error';
 
@@ -14,8 +15,17 @@ export function Scanner() {
   const [result, setResult] = useState<ScanResult | null>(null);
   const audioEnabledRef = useRef(false);
   const audioElementRef = useRef<HTMLAudioElement | null>(null);
+  const controllerRef = useRef<IScannerControls | null>(null);
+  const qrScannerRef = useRef<{
+    startScanning: () => void;
+    stopScanning: () => void;
+  }>(null);
 
-  const handleScan = async (qrcode: string) => {
+  const handleScan = async (
+    qrcode: string,
+    scannerController?: IScannerControls
+  ) => {
+    controllerRef.current = scannerController ?? null;
     playAudio();
     setResult({
       success: true,
@@ -47,6 +57,11 @@ export function Scanner() {
   const handleReset = () => {
     setState('ready');
     setResult(null);
+    console.log(`qrSacnnerRef: ${JSON.stringify(qrScannerRef, null, 2)}`);
+    if (qrScannerRef.current) {
+      console.log('Try to restart scanner');
+      qrScannerRef.current.startScanning();
+    }
   };
 
   return (
@@ -59,7 +74,11 @@ export function Scanner() {
           />
         }
       >
-        <QrScanner className="h-full w-full" handleScan={handleScan} />
+        <QrScanner
+          ref={qrScannerRef}
+          className="h-full w-full"
+          handleScan={handleScan}
+        />
       </CameraViewfinder>
 
       <ResultSheet
