@@ -7,6 +7,7 @@ import { ScanResult } from '../domain/scanner-result';
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
@@ -16,13 +17,27 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 type ResultSheetProps = {
   result: ScanResult | null;
   isOpen: boolean;
+  acccessibilityLabel?: string;
+  acccessibilityContentDescription?: string;
   onClose: () => void;
 };
 
-export function ResultSheet({ result, isOpen, onClose }: ResultSheetProps) {
+export function ResultSheet({
+  result,
+  isOpen,
+  onClose,
+  acccessibilityLabel,
+  acccessibilityContentDescription,
+}: ResultSheetProps) {
   if (!result) return null;
 
-  return SheetImpl({ result, isOpen, onClose });
+  return SheetImpl({
+    result,
+    isOpen,
+    onClose,
+    acccessibilityLabel,
+    acccessibilityContentDescription,
+  });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -66,7 +81,13 @@ function ErrorIcon() {
   );
 }
 
-function SheetImpl({ result, isOpen, onClose }: ResultSheetProps) {
+function SheetImpl({
+  result,
+  isOpen,
+  onClose,
+  acccessibilityLabel,
+  acccessibilityContentDescription,
+}: ResultSheetProps) {
   if (!result) return null;
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -76,7 +97,10 @@ function SheetImpl({ result, isOpen, onClose }: ResultSheetProps) {
       >
         <SheetHeader>
           <VisuallyHidden>
-            <SheetTitle>QR Code Result</SheetTitle>
+            <SheetTitle>{acccessibilityLabel}</SheetTitle>
+            <SheetDescription>
+              {acccessibilityContentDescription}
+            </SheetDescription>
           </VisuallyHidden>
         </SheetHeader>
         <div className="flex h-full flex-grow flex-col items-center justify-between text-center">
