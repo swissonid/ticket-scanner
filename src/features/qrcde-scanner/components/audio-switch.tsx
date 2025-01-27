@@ -32,7 +32,7 @@ export function AudioSwitch({
         src="/sounds/scanner-beep.mp3"
         hidden
         autoPlay={false}
-        //@ts-ignore
+        //@ts-expect-error not all browsers support this
         disableRemotePlayback
       />
     </div>
