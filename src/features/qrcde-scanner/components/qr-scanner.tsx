@@ -109,6 +109,9 @@ export function QrScanner({ className, handleScan }: QrScannerProps) {
   useEffect(() => {
     startScanning();
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const preventDefault = (event: Event) => event.preventDefault();
+
     return () => {
       if (controlsRef.current) {
         controlsRef.current.stop();
@@ -120,6 +123,7 @@ export function QrScanner({ className, handleScan }: QrScannerProps) {
     <video
       ref={videoRef}
       className={cn('absolute inset-0 h-full w-full object-cover', className)}
+      tabIndex={-1} // Ensure the video element is not focusable
     />
   );
 }
