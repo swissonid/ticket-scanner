@@ -1,6 +1,5 @@
 'use client';
 import { ScanQrCode } from 'lucide-react';
-import QrScanner from './qr-scanner';
 
 interface CameraViewfinderProps {
   children?: React.ReactNode;
