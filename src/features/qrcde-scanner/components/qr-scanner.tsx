@@ -2,19 +2,21 @@
 
 import { BrowserQRCodeReader, IScannerControls } from '@zxing/browser';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { provideFeedback } from '@/lib/feedback';
 import { cn } from '@/lib/utils';
 
 export type ScannerState = 'initializing' | 'ready' | 'scanning' | 'result';
 
-type QrScannerProps = React.HTMLAttributes<HTMLVideoElement>;
+type QrScannerProps = {
+  handleScan: (result: string) => void;
+} & React.HTMLAttributes<HTMLVideoElement>;
+
 export interface ScanResult {
   success: boolean;
   message: string;
   code?: string;
 }
 
-export function QrScanner({ className }: QrScannerProps) {
+export function QrScanner({ className, handleScan }: QrScannerProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [state, setState] = useState<ScannerState>('ready');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -41,15 +43,12 @@ export function QrScanner({ className }: QrScannerProps) {
     }
   }, []);
 
-  const handleScan = useCallback((result: string) => {
-    provideFeedback();
-    setResult({
-      success: true,
-      message: 'QR code scanned successfully',
-      code: result,
-    });
-    setState('result');
-  }, []);
+  const internalHandleScan = useCallback(
+    (result: string) => {
+      handleScan(result);
+    },
+    [handleScan]
+  );
 
   const handleError = useCallback((error: Error) => {
     console.error('Error scanning QR code:', error);
@@ -83,14 +82,14 @@ export function QrScanner({ className }: QrScannerProps) {
         videoRef.current!,
         (result) => {
           if (result) {
-            handleScan(result.getText());
+            internalHandleScan(result.getText());
           }
         }
       );
     } catch (error) {
       handleError(error as Error);
     }
-  }, [hasPermission, requestCameraPermission, handleScan, handleError]);
+  }, [hasPermission, requestCameraPermission, internalHandleScan, handleError]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const stopScanning = useCallback(() => {

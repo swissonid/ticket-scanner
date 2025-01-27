@@ -5,31 +5,46 @@ import { ScanResult } from '../domain/scanner-result';
 import { CameraViewfinder } from '../components/camera-finder';
 import { ResultSheet } from '../components/result-sheet';
 import { QrScanner } from '../components/qr-scanner';
-import { provideFeedback } from '@/lib/feedback';
+import { AudioSwitch } from '../components/audio-switch';
 
 export type ScannerState = 'ready' | 'scanning' | 'result' | 'error';
 
 export function Scanner() {
   const [state, setState] = useState<ScannerState>('ready');
   const [result, setResult] = useState<ScanResult | null>(null);
+  const [audioEnabled, setAudioEnabled] = useState(false);
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(
+    null
+  );
 
   // Simulate scanning process
-  const handleScan = async () => {
-    setState('scanning');
-    provideFeedback();
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    // Simulate random success/error
-    const success = Math.random() > 0.5;
+  const handleScan = async (qrcode: string) => {
+    playAudio();
     setResult({
-      success,
-      message: success
-        ? 'QR code scanned successfully'
-        : 'This code has already been used',
-      code: success ? 'QR123456' : undefined,
+      success: true,
+      message: 'QR Code scanned successfully',
+      code: qrcode,
     });
     setState('result');
+  };
+
+  const handleAudioSwitch = (
+    isEnabled: boolean,
+    audioElement: HTMLAudioElement
+  ) => {
+    setAudioEnabled(isEnabled);
+    if (isEnabled) {
+      audioElement.play();
+      setAudioElement(audioElement);
+    } else {
+      setAudioElement(null);
+    }
+  };
+
+  const playAudio = () => {
+    if (audioElement) {
+      audioElement.play();
+    }
   };
 
   const handleReset = () => {
@@ -39,8 +54,12 @@ export function Scanner() {
 
   return (
     <>
-      <CameraViewfinder>
-        <QrScanner className="h-full w-full" />
+      <CameraViewfinder
+        underFinder={
+          <AudioSwitch onChange={handleAudioSwitch} isEnable={audioEnabled} />
+        }
+      >
+        <QrScanner className="h-full w-full" handleScan={handleScan} />
       </CameraViewfinder>
 
       <ResultSheet
@@ -48,16 +67,6 @@ export function Scanner() {
         isOpen={state === 'result'}
         onClose={handleReset}
       />
-
-      {/* Temporary scan trigger for demo */}
-      {state === 'ready' && (
-        <button
-          onClick={handleScan}
-          className="fixed bottom-8 left-1/2 -translate-x-1/2 rounded-md bg-black px-4 py-2 text-white"
-        >
-          Simulate Scan
-        </button>
-      )}
     </>
   );
 }

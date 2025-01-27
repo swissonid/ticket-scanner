@@ -1,10 +1,15 @@
+'use client';
 import { QrCode } from 'lucide-react';
 
 interface CameraViewfinderProps {
   children?: React.ReactNode;
+  underFinder?: React.ReactNode;
 }
 
-export function CameraViewfinder({ children }: CameraViewfinderProps) {
+export function CameraViewfinder({
+  children,
+  underFinder,
+}: CameraViewfinderProps) {
   return (
     <div className="relative h-full min-h-screen w-full bg-gray-100">
       <div className="absolute inset-0 h-full w-full">{children}</div>
@@ -13,6 +18,7 @@ export function CameraViewfinder({ children }: CameraViewfinderProps) {
       </div>
       <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
         <CameraFinder />
+        {underFinder}
       </div>
     </div>
   );
