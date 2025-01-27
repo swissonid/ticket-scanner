@@ -1,21 +1,23 @@
 'use client';
-import { cn } from '@/lib/utils';
+
 import { BrowserQRCodeReader, IScannerControls } from '@zxing/browser';
-import Webcam from 'react-webcam';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { provideFeedback } from '@/lib/feedback';
-type QrScannerProps = React.HTMLAttributes<HTMLVideoElement>;
-type Permissions = 'prompt' | 'granted' | 'denied' | 'notAskedYet';
+import { cn } from '@/lib/utils';
+
 export type ScannerState = 'initializing' | 'ready' | 'scanning' | 'result';
 
+type QrScannerProps = React.HTMLAttributes<HTMLVideoElement>;
 export interface ScanResult {
   success: boolean;
   message: string;
   code?: string;
 }
 
-export function QrScanner({ className, ...props }: QrScannerProps) {
+export function QrScanner({ className }: QrScannerProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [state, setState] = useState<ScannerState>('ready');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [result, setResult] = useState<ScanResult | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -90,6 +92,7 @@ export function QrScanner({ className, ...props }: QrScannerProps) {
     }
   }, [hasPermission, requestCameraPermission, handleScan, handleError]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const stopScanning = useCallback(() => {
     if (controlsRef.current) {
       controlsRef.current.stop();
@@ -98,6 +101,7 @@ export function QrScanner({ className, ...props }: QrScannerProps) {
     setState('ready');
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleReset = useCallback(() => {
     setResult(null);
     startScanning();
@@ -116,7 +120,7 @@ export function QrScanner({ className, ...props }: QrScannerProps) {
   return (
     <video
       ref={videoRef}
-      className="absolute inset-0 h-full w-full object-cover"
+      className={cn('absolute inset-0 h-full w-full object-cover', className)}
     />
   );
 }

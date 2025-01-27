@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, Cross, XCircle } from 'lucide-react';
+import { CheckCircle2, Cross } from 'lucide-react';
 import { ScanResult } from '../domain/scanner-result';
 
 import {
@@ -25,6 +25,7 @@ export function ResultSheet({ result, isOpen, onClose }: ResultSheetProps) {
   return SheetImpl({ result, isOpen, onClose });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function VaultImpl({ result, isOpen, onClose }: ResultSheetProps) {
   if (!result) return null;
   return (

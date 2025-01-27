@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2 } from 'lucide-react';
 import { ScanResult } from '../domain/scanner-result';
 import { CameraViewfinder } from '../components/camera-finder';
 import { ResultSheet } from '../components/result-sheet';
