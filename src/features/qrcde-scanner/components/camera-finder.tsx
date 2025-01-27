@@ -1,5 +1,6 @@
 'use client';
-import { QrCode } from 'lucide-react';
+import { ScanQrCode } from 'lucide-react';
+import QrScanner from './qr-scanner';
 
 interface CameraViewfinderProps {
   children?: React.ReactNode;
@@ -34,7 +35,7 @@ function InfoBanner() {
   return (
     <div className="mt-8 w-full max-w-md p-4">
       <div className="flex h-[4.5rem] items-center gap-3 rounded-2xl bg-white/90 p-4 backdrop-blur-sm">
-        <QrCode className="size-6 flex-shrink-0" />
+        <ScanQrCode className="size-6 flex-shrink-0" />
         <p className="text-sm">
           Scanne den QR-Code auf dem Gutschein um ihn den Entwertungsprozess zu
           beginnen
