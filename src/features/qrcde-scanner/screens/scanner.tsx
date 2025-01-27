@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { ScanResult } from '../domain/scanner-result';
 import { CameraViewfinder } from '../components/camera-finder';
 import { ResultSheet } from '../components/result-sheet';
@@ -12,12 +12,9 @@ export type ScannerState = 'ready' | 'scanning' | 'result' | 'error';
 export function Scanner() {
   const [state, setState] = useState<ScannerState>('ready');
   const [result, setResult] = useState<ScanResult | null>(null);
-  const [audioEnabled, setAudioEnabled] = useState(false);
-  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(
-    null
-  );
+  const audioEnabledRef = useRef(false);
+  const audioElementRef = useRef<HTMLAudioElement | null>(null);
 
-  // Simulate scanning process
   const handleScan = async (qrcode: string) => {
     playAudio();
     setResult({
@@ -32,18 +29,18 @@ export function Scanner() {
     isEnabled: boolean,
     audioElement: HTMLAudioElement
   ) => {
-    setAudioEnabled(isEnabled);
+    audioEnabledRef.current = isEnabled;
     if (isEnabled) {
       audioElement.play();
-      setAudioElement(audioElement);
+      audioElementRef.current = audioElement;
     } else {
-      setAudioElement(null);
+      audioElementRef.current = null;
     }
   };
 
   const playAudio = () => {
-    if (audioElement) {
-      audioElement.play();
+    if (audioElementRef.current) {
+      audioElementRef.current.play();
     }
   };
 
@@ -56,7 +53,10 @@ export function Scanner() {
     <>
       <CameraViewfinder
         underFinder={
-          <AudioSwitch onChange={handleAudioSwitch} isEnable={audioEnabled} />
+          <AudioSwitch
+            onChange={handleAudioSwitch}
+            isEnable={audioEnabledRef.current}
+          />
         }
       >
         <QrScanner className="h-full w-full" handleScan={handleScan} />
