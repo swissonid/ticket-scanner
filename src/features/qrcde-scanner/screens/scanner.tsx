@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useRef, useImperativeHandle } from 'react';
+import { useState, useRef } from 'react';
 import { ScanResult } from '../domain/scanner-result';
 import { CameraViewfinder } from '../components/camera-finder';
 import { ResultSheet } from '../components/result-sheet';
-import { QrScanner } from '../components/qr-scanner';
+import QrScanner from '../components/qr-scanner';
 import { AudioSwitch } from '../components/audio-switch';
 import { IScannerControls } from '@zxing/browser';
 

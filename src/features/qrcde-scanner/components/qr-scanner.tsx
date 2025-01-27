@@ -24,7 +24,7 @@ export interface ScanResult {
   code?: string;
 }
 
-export const QrScanner = forwardRef(
+const QrScanner = forwardRef(
   ({ className, handleScan, onStageChange }: QrScannerProps, ref) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [state, setState] = useState<ScannerState>('ready');
@@ -185,3 +185,7 @@ export const QrScanner = forwardRef(
     );
   }
 );
+
+QrScanner.displayName = 'QrScanner';
+
+export default QrScanner;
