@@ -91,6 +91,34 @@ export async function isVoucherValid(
   }
 }
 
+export async function redeemVoucher(voucherId: string) {
+  try {
+    const code = voucherId.toUpperCase();
+    console.log(`Got voucher ${voucherId} to redeem`);
+    const kv = kvClient();
+    const voucher = await kv.get<Voucher>(code);
+
+    const redeemedVoucher: Voucher = {
+      ...voucher,
+      isAlreadyUsed: true,
+      code: code,
+    };
+
+    console.log(
+      `try to update ${voucherId} with ${JSON.stringify(redeemedVoucher, null, 2)}`
+    );
+    await kv.set(code, redeemedVoucher);
+    console.log(`Redeemed ${voucherId}!`);
+    return true;
+  } catch (e) {
+    console.log(
+      `Something went wrong during redeeming voucher ${voucherId}`,
+      e
+    );
+    return false;
+  }
+}
+
 function isQRCodeValid(qrCode: string) {
   const lowerCase = qrCode.toLocaleLowerCase();
   return lowerCase.startsWith('pc');

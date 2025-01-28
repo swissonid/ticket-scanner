@@ -54,7 +54,7 @@ export function Scanner() {
   useEffect(() => {
     console.log('Success go to the movies!!!!');
     if (result?.isValid) {
-      router.push('/movies');
+      router.push(`/movies?voucherid=${result.voucher.code}`);
     }
   }, [result]);
 
