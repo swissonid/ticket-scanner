@@ -1,13 +1,7 @@
 'use client';
 
-import {
-  useState,
-  useRef,
-  useActionState,
-  useTransition,
-  useEffect,
-} from 'react';
-import { Voucher } from '../domain/voucher';
+import { useState, useRef, useTransition, useEffect } from 'react';
+
 import { CameraViewfinder } from '../components/camera-finder';
 import { ResultSheet } from '../components/result-sheet';
 import QrScanner from '../components/qr-scanner';

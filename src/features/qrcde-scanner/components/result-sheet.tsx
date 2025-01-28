@@ -1,9 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { CheckCircle2, Cross } from 'lucide-react';
-import { Voucher } from '../domain/voucher';
-
 import {
   Sheet,
   SheetContent,
@@ -55,14 +51,6 @@ function VaultImpl({ isOpen, onClose, children }: ResultSheetProps) {
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>
-  );
-}
-
-function ErrorIcon() {
-  return (
-    <div className="flex size-14 items-center justify-center rounded-full bg-destructive">
-      <Cross className="size-9 rotate-45 text-white" fill="white" />
-    </div>
   );
 }
 
