@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Cross } from 'lucide-react';
-import { ScanResult } from '../domain/scanner-result';
+import { Voucher } from '../domain/scanner-result';
 
 import {
   Sheet,
@@ -13,9 +13,11 @@ import {
 } from '@/components/ui/sheet';
 import { Drawer } from 'vaul';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import { ReactNode } from 'react';
 
 type ResultSheetProps = {
-  result: ScanResult | null;
+  children?: ReactNode;
+
   isOpen: boolean;
   acccessibilityLabel?: string;
   acccessibilityContentDescription?: string;
@@ -23,16 +25,16 @@ type ResultSheetProps = {
 };
 
 export function ResultSheet({
-  result,
+  children,
+
   isOpen,
   onClose,
   acccessibilityLabel,
   acccessibilityContentDescription,
 }: ResultSheetProps) {
-  if (!result) return null;
-
   return SheetImpl({
-    result,
+    children,
+
     isOpen,
     onClose,
     acccessibilityLabel,
@@ -41,8 +43,7 @@ export function ResultSheet({
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function VaultImpl({ result, isOpen, onClose }: ResultSheetProps) {
-  if (!result) return null;
+function VaultImpl({ isOpen, onClose, children }: ResultSheetProps) {
   return (
     <Drawer.Root open={isOpen} modal={false} onClose={onClose}>
       <Drawer.Portal>
@@ -51,22 +52,7 @@ function VaultImpl({ result, isOpen, onClose }: ResultSheetProps) {
           <Drawer.Handle className="mb-4 mt-4" />
           <Drawer.Title />
           <Drawer.Description />
-          <div className="flex h-full flex-col items-center justify-center gap-4 px-4 text-center">
-            {result.success ? (
-              <CheckCircle2 className="h-12 w-12 text-green-500" />
-            ) : (
-              <ErrorIcon />
-            )}
-            <h3 className="text-xl font-semibold">{result.message}</h3>
-            {result.code && (
-              <p className="text-sm text-muted-foreground">
-                Code: {result.code}
-              </p>
-            )}
-            <Button onClick={onClose} className="mt-4 w-full">
-              OK
-            </Button>
-          </div>
+          {children}
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>
@@ -82,13 +68,12 @@ function ErrorIcon() {
 }
 
 function SheetImpl({
-  result,
+  children,
   isOpen,
   onClose,
   acccessibilityLabel,
   acccessibilityContentDescription,
 }: ResultSheetProps) {
-  if (!result) return null;
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <SheetContent
@@ -103,25 +88,7 @@ function SheetImpl({
             </SheetDescription>
           </VisuallyHidden>
         </SheetHeader>
-        <div className="flex h-full flex-grow flex-col items-center justify-between text-center">
-          <div className="flex flex-col items-center gap-4">
-            {result.success ? (
-              <CheckCircle2 className="h-12 w-12 text-green-500" />
-            ) : (
-              <ErrorIcon />
-            )}
-            <h3 className="text-xl font-semibold">{result.message}</h3>
-            {result.code && (
-              <p className="text-sm text-muted-foreground">
-                Code: {result.code}
-              </p>
-            )}
-          </div>
-
-          <Button onClick={onClose} className="mt-4 w-full self-end">
-            OK
-          </Button>
-        </div>
+        {children}
       </SheetContent>
     </Sheet>
   );

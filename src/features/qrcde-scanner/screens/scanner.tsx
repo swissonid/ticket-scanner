@@ -1,18 +1,20 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { ScanResult } from '../domain/scanner-result';
+import { Voucher } from '../domain/scanner-result';
 import { CameraViewfinder } from '../components/camera-finder';
 import { ResultSheet } from '../components/result-sheet';
 import QrScanner from '../components/qr-scanner';
 import { AudioSwitch } from '../components/audio-switch';
 import { IScannerControls } from '@zxing/browser';
+import { Button } from '@/components/ui/button';
+import { LoadingIcon } from '../components/loading-icon';
 
 export type ScannerState = 'ready' | 'scanning' | 'result' | 'error';
 
 export function Scanner() {
   const [state, setState] = useState<ScannerState>('ready');
-  const [result, setResult] = useState<ScanResult | null>(null);
+  const [voucher, setVoucher] = useState<Voucher | null>(null);
   const audioEnabledRef = useRef(false);
   const audioElementRef = useRef<HTMLAudioElement | null>(null);
   const controllerRef = useRef<IScannerControls | null>(null);
@@ -21,14 +23,16 @@ export function Scanner() {
     stopScanning: () => void;
   }>(null);
 
+  const isResultShetOpenRef = useRef<boolean>(state === 'result');
+
   const handleScan = async (
     qrcode: string,
     scannerController?: IScannerControls
   ) => {
     controllerRef.current = scannerController ?? null;
     playAudio();
-    setResult({
-      success: true,
+    setVoucher({
+      checkingStatus: 'inProgress',
       message: 'QR Code scanned successfully',
       code: qrcode,
     });
@@ -56,7 +60,7 @@ export function Scanner() {
 
   const handleReset = () => {
     setState('ready');
-    setResult(null);
+    setVoucher(null);
     console.log(`qrSacnnerRef: ${JSON.stringify(qrScannerRef, null, 2)}`);
     if (qrScannerRef.current) {
       console.log('Try to restart scanner');
@@ -81,11 +85,23 @@ export function Scanner() {
         />
       </CameraViewfinder>
 
-      <ResultSheet
-        result={result}
-        isOpen={state === 'result'}
-        onClose={handleReset}
-      />
+      <ResultSheet isOpen={state === 'result'} onClose={handleReset}>
+        <VoucherCheckContent />
+      </ResultSheet>
     </>
+  );
+}
+
+function VoucherCheckContent() {
+  return (
+    <div className="flex h-full flex-grow flex-col items-center justify-between">
+      <div className="flex flex-col items-center gap-11 pt-8">
+        <LoadingIcon />
+        <h4 className="text-xl font-bold">Gutschein wird überprüft</h4>
+      </div>
+      <Button disabled className="w-full">
+        Ok
+      </Button>
+    </div>
   );
 }

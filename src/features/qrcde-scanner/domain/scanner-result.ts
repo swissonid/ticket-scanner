@@ -1,5 +1,5 @@
-export type ScanResult = {
-    success: boolean
-    message: string
-    code?: string
-}
+export type Voucher = {
+  checkingStatus: 'success' | 'fialure' | 'inProgress';
+  message: string;
+  code?: string;
+};
