@@ -1,6 +1,12 @@
 'use client';
 
-import { useState, useRef, useActionState, useTransition } from 'react';
+import {
+  useState,
+  useRef,
+  useActionState,
+  useTransition,
+  useEffect,
+} from 'react';
 import { Voucher } from '../domain/voucher';
 import { CameraViewfinder } from '../components/camera-finder';
 import { ResultSheet } from '../components/result-sheet';
@@ -28,26 +34,35 @@ export function Scanner() {
   }>(null);
   const router = useRouter();
   const [isPending, startTransaction] = useTransition();
+  const isScanning = useRef<boolean>(true);
   const [result, setResult] = useState<VoucherValidateState | null>(null);
 
-  const handleScan = async (
-    qrcode: string,
-    scannerController?: IScannerControls
-  ) => {
+  const handleScan = (qrcode: string, scannerController?: IScannerControls) => {
     controllerRef.current = scannerController ?? null;
+    isScanning.current = false;
     playAudio();
     const voucher = {
       message: 'A voucher',
       code: qrcode,
     };
     startTransaction(async () => {
+      console.log(`Started transaction for ${qrcode} `);
       const result = await isVoucherValid({
         voucher: voucher,
       });
-      setResult(result);
+
       restartScanner();
+      console.log(`Got from backend ${JSON.stringify(result, null, 2)}`);
+      setResult(result);
     });
   };
+
+  useEffect(() => {
+    console.log('Success go to the movies!!!!');
+    if (result?.isValid) {
+      router.push('/movies');
+    }
+  }, [result]);
 
   const handleAudioSwitch = (
     isEnabled: boolean,
@@ -70,8 +85,9 @@ export function Scanner() {
 
   const restartScanner = () => {
     console.log(`qrSacnnerRef: ${JSON.stringify(qrScannerRef, null, 2)}`);
-    if (qrScannerRef.current) {
+    if (qrScannerRef.current !== null && isScanning.current === false) {
       console.log('Try to restart scanner');
+      isScanning.current = true;
       qrScannerRef.current.startScanning();
     }
   };
