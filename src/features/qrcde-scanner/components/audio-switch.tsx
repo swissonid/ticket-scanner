@@ -1,6 +1,7 @@
 'use client';
 
 import { Switch } from '@/components/ui/switch';
+import { BellOff, Bell } from 'lucide-react';
 import { useState } from 'react';
 
 export function AudioSwitch({
@@ -24,8 +25,13 @@ export function AudioSwitch({
   return (
     <div className="flex w-full flex-row items-center justify-end gap-2 pr-2 pt-2">
       <p className="cursor-pointer text-sm text-white" onClick={handleClick}>
-        Scanner Audio {isAudioEnabled ? 'an' : 'aus'}
+        Scanner Ton {isAudioEnabled ? 'an' : 'aus'}
       </p>
+      {isAudioEnabled ? (
+        <Bell className="text-primary" />
+      ) : (
+        <BellOff className="text-primary" />
+      )}
       <Switch onClick={handleClick} checked={isAudioEnabled} />
       <audio
         id="scanner-beep"
