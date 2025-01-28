@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Cross } from 'lucide-react';
-import { Voucher } from '../domain/scanner-result';
+import { Voucher } from '../domain/voucher';
 
 import {
   Sheet,
@@ -21,12 +21,11 @@ type ResultSheetProps = {
   isOpen: boolean;
   acccessibilityLabel?: string;
   acccessibilityContentDescription?: string;
-  onClose: () => void;
+  onClose?: () => void;
 };
 
 export function ResultSheet({
   children,
-
   isOpen,
   onClose,
   acccessibilityLabel,
@@ -75,7 +74,7 @@ function SheetImpl({
   acccessibilityContentDescription,
 }: ResultSheetProps) {
   return (
-    <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Sheet open={isOpen} onOpenChange={(open) => !open && onClose?.()}>
       <SheetContent
         side="bottom"
         className="flex min-h-[40vh] flex-col rounded-t-2xl"

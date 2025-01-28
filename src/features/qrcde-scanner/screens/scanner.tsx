@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { Voucher } from '../domain/scanner-result';
+import { useState, useRef, useActionState, useTransition } from 'react';
+import { Voucher } from '../domain/voucher';
 import { CameraViewfinder } from '../components/camera-finder';
 import { ResultSheet } from '../components/result-sheet';
 import QrScanner from '../components/qr-scanner';
@@ -9,12 +9,16 @@ import { AudioSwitch } from '../components/audio-switch';
 import { IScannerControls } from '@zxing/browser';
 import { Button } from '@/components/ui/button';
 import { LoadingIcon } from '../components/loading-icon';
+import {
+  isVoucherValid,
+  VoucherValidateState,
+} from '../actions/qrcode.server-actions';
+import { useRouter } from 'next/navigation';
+import { ErrorIcon } from '../components/error-icon';
 
 export type ScannerState = 'ready' | 'scanning' | 'result' | 'error';
 
 export function Scanner() {
-  const [state, setState] = useState<ScannerState>('ready');
-  const [voucher, setVoucher] = useState<Voucher | null>(null);
   const audioEnabledRef = useRef(false);
   const audioElementRef = useRef<HTMLAudioElement | null>(null);
   const controllerRef = useRef<IScannerControls | null>(null);
@@ -22,8 +26,9 @@ export function Scanner() {
     startScanning: () => void;
     stopScanning: () => void;
   }>(null);
-
-  const isResultShetOpenRef = useRef<boolean>(state === 'result');
+  const router = useRouter();
+  const [isPending, startTransaction] = useTransition();
+  const [result, setResult] = useState<VoucherValidateState | null>(null);
 
   const handleScan = async (
     qrcode: string,
@@ -31,12 +36,17 @@ export function Scanner() {
   ) => {
     controllerRef.current = scannerController ?? null;
     playAudio();
-    setVoucher({
-      checkingStatus: 'inProgress',
-      message: 'QR Code scanned successfully',
+    const voucher = {
+      message: 'A voucher',
       code: qrcode,
+    };
+    startTransaction(async () => {
+      const result = await isVoucherValid({
+        voucher: voucher,
+      });
+      setResult(result);
+      restartScanner();
     });
-    setState('result');
   };
 
   const handleAudioSwitch = (
@@ -58,14 +68,19 @@ export function Scanner() {
     }
   };
 
-  const handleReset = () => {
-    setState('ready');
-    setVoucher(null);
+  const restartScanner = () => {
     console.log(`qrSacnnerRef: ${JSON.stringify(qrScannerRef, null, 2)}`);
     if (qrScannerRef.current) {
       console.log('Try to restart scanner');
       qrScannerRef.current.startScanning();
     }
+  };
+
+  const voucherHasError = (
+    voucherValidateState: VoucherValidateState | undefined | null
+  ) => {
+    if (!voucherValidateState) return false;
+    return voucherValidateState.showError ?? false;
   };
 
   return (
@@ -85,14 +100,24 @@ export function Scanner() {
         />
       </CameraViewfinder>
 
-      <ResultSheet isOpen={state === 'result'} onClose={handleReset}>
-        <VoucherCheckContent />
+      <ResultSheet isOpen={isPending}>
+        <VoucherIsCheckingContent />
+      </ResultSheet>
+
+      <ResultSheet
+        isOpen={voucherHasError(result)}
+        onClose={() => setResult(null)}
+      >
+        <VoucherHasError
+          voucherValidateState={result}
+          onOkClicked={() => setResult(null)}
+        />
       </ResultSheet>
     </>
   );
 }
 
-function VoucherCheckContent() {
+function VoucherIsCheckingContent() {
   return (
     <div className="flex h-full flex-grow flex-col items-center justify-between">
       <div className="flex flex-col items-center gap-11 pt-8">
@@ -100,6 +125,30 @@ function VoucherCheckContent() {
         <h4 className="text-xl font-bold">Gutschein wird überprüft</h4>
       </div>
       <Button disabled className="w-full">
+        Ok
+      </Button>
+    </div>
+  );
+}
+
+function VoucherHasError({
+  voucherValidateState,
+  onOkClicked,
+}: {
+  voucherValidateState: VoucherValidateState | undefined | null;
+  onOkClicked?: () => void;
+}) {
+  if (!voucherValidateState) return null;
+  const { errorMessage } = voucherValidateState;
+  return (
+    <div className="flex h-full flex-grow flex-col items-center justify-between">
+      <div className="flex flex-col items-center gap-11 pt-8">
+        <ErrorIcon />
+        <h4 className="text-xl font-bold">
+          {errorMessage ?? 'Unbekannter Fehler aufgetreten'}
+        </h4>
+      </div>
+      <Button className="w-full" onClick={onOkClicked}>
         Ok
       </Button>
     </div>
