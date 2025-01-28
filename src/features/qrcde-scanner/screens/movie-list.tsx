@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { RadioGroupIndicator } from '@radix-ui/react-radio-group';
 import { redeemVoucher } from '../actions/qrcode.server-actions';
 import { VoucherIcon } from '../components/voucher-icon';
 
