@@ -11,7 +11,7 @@ export function CameraViewfinder({
   underFinder,
 }: CameraViewfinderProps) {
   return (
-    <div className="relative h-full min-h-screen w-full bg-gray-100">
+    <div className="relative h-full w-full bg-gray-100">
       <div className="absolute inset-0 h-full w-full">{children}</div>
       <div className="absolute inset-0 flex flex-col items-center">
         <InfoBanner />
