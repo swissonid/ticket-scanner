@@ -78,7 +78,7 @@ export async function isVoucherValid(
       showError: qrcode.isAlreadyUsed,
       isValid: !qrcode.isAlreadyUsed,
       errorMessage: qrcode.isAlreadyUsed
-        ? 'Der Gutschein wurde schon entwerted'
+        ? 'Der Gutschein wurde bereits entwertet'
         : undefined,
       voucher: {
         ...voucher,
