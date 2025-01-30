@@ -29,7 +29,7 @@ const movies: Movie[] = [
   { id: '3', title: 'Pulp Fiction', price: 10.99 },
   { id: '4', title: 'Inception', price: 13.99 },
   { id: '5', title: 'The Matrix', price: 9.99 },
-  { id: '6', title: 'Forrest Gump', price: 12.99 },
+  /*{ id: '6', title: 'Forrest Gump', price: 12.99 },
   {
     id: '7',
     title: 'The Lord of the Rings: The Fellowship of the Ring',
@@ -37,7 +37,7 @@ const movies: Movie[] = [
   },
   { id: '8', title: 'Spirited Away', price: 11.99 },
   { id: '9', title: 'Parasite', price: 10.99 },
-  { id: '10', title: '12 Angry Men', price: 9.99 },
+  { id: '10', title: '12 Angry Men', price: 9.99 },*/
 ];
 
 function getTodayFormatted() {
@@ -179,7 +179,7 @@ export default function MovieList() {
                   {selectedMovie.title}
                 </h3>
 
-                <Label className="text-gray-500">Veranstaltung</Label>
+                {/*<Label className="text-gray-500">Veranstaltung</Label>
                 <div className="mt-2 flex gap-2">
                   {['18:00', '20:00', '21:00'].map((time) => (
                     <Button
@@ -191,7 +191,7 @@ export default function MovieList() {
                       {time}
                     </Button>
                   ))}
-                </div>
+                </div>*/}
               </div>
 
               <div>
