@@ -133,10 +133,10 @@ export default function MovieList() {
                   <p className="font-semibold">{movie.title}</p>
                 </div>
               </div>
-              <div className="text-right">
+              {/*<div className="text-right">
                 <span className="text-sm">Preise (standart Kategorie)</span>
                 <p className="font-semibold">{fromatPrice(movie.price)}</p>
-              </div>
+              </div>*/}
             </Label>
           ))}
         </RadioGroup>
@@ -179,7 +179,7 @@ export default function MovieList() {
                   {selectedMovie.title}
                 </h3>
 
-                <Label className="text-gray-500">Engültiger Preis</Label>
+                <Label className="text-gray-500">Preis</Label>
                 <div className="mt-2 flex gap-2">
                   {[12.0, 15.0, 16.0].map((price) => (
                     <Button
