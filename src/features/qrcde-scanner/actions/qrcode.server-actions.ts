@@ -135,8 +135,10 @@ export async function redeemVoucher(voucherId: string) {
 }
 
 function isQRCodeValid(qrCode: string) {
-  const lowerCase = qrCode.toLocaleLowerCase();
-  return lowerCase.startsWith('pc');
+  const lowerCase = qrCode.toLowerCase();
+  const forgroundVoucher = 'PC012576543214950956'.toLowerCase();
+
+  return lowerCase.startsWith('pc') && qrCode !== forgroundVoucher;
 }
 
 function logResult(voucherState: VoucherValidateState) {
@@ -144,7 +146,6 @@ function logResult(voucherState: VoucherValidateState) {
 }
 
 function isVoucherAPowerPointVoucher(qrCode: string) {
-  const forgroundVoucher = 'PC012576543214950956';
   const backgroundVoucher = 'PC012512345674950956';
-  return qrCode === forgroundVoucher || qrCode === backgroundVoucher;
+  return qrCode === backgroundVoucher;
 }

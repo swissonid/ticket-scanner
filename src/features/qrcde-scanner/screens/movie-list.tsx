@@ -194,12 +194,13 @@ export default function MovieList() {
                 </div>
               </div>
 
-              <div>
+              {/*<div>
                 <Label className="text-gray-500">Preise</Label>
                 <p className="text-2xl font-bold">
                   {fromatPrice(selectedPrice)}
                 </p>
-              </div>
+              </div>*/}
+              <div className="h-2" />
 
               <Button
                 className="w-full rounded-lg py-6 text-lg"
