@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useRef, useTransition } from 'react';
 import { X, Loader2, CalendarIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -42,18 +41,14 @@ const movies: Movie[] = [
 
 function getTodayFormatted() {
   const currentDate = new Date();
-  const options: Intl.DateTimeFormatOptions = {
-    weekday: 'short',
-    day: 'numeric',
-    month: 'numeric',
-    year: 'numeric',
-  };
-  const formattedDate = currentDate
-    .toLocaleDateString('de-DE', options)
-    .replace(',', '.')
-    .replace(/\. /g, '.')
-    .replace('..', ', ');
-  return formattedDate;
+  const day = currentDate.getDate().toString().padStart(2, '0');
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+  const year = currentDate.getFullYear();
+  // We avoid using toLocaleDateString() to avoid hydration mismatch
+  const weekdays = ['So.', 'Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.'];
+  const weekday = weekdays[currentDate.getDay()];
+
+  return `${weekday}, ${day}.${month}.${year}`;
 }
 
 export default function MovieList() {
