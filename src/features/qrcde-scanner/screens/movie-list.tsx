@@ -76,8 +76,7 @@ export default function MovieList() {
           const result = await redeemVoucher(voucherId);
           console.log(result);
           setIsOpen(false);
-          router.back();
-          router.refresh();
+          router.replace('/');
         } catch (error) {
           console.log(error);
           // Handle error (e.g., show an error message)
@@ -93,8 +92,7 @@ export default function MovieList() {
           <button
             className="-ml-2 p-2"
             onClick={() => {
-              router.back();
-              router.refresh();
+              router.replace('/');
             }}
           >
             <X className="h-6 w-6" />

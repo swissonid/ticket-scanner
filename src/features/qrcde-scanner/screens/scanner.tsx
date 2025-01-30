@@ -52,9 +52,7 @@ export function Scanner() {
   useEffect(() => {
     console.log('Success go to the movies!!!!');
     if (result?.isValid) {
-      //router.push(`/movies?voucherid=${result.voucher.code}`);
-
-      window.location.href = `/movies?voucherid=${result.voucher.code}`;
+      router.replace(`/movies?voucherid=${result.voucher.code}`);
     }
   }, [result, router]);
 
@@ -92,11 +90,6 @@ export function Scanner() {
     if (!voucherValidateState) return false;
     return voucherValidateState.showError ?? false;
   };
-  useEffect(() => {
-    if (qrScannerRef.current) {
-      qrScannerRef.current.startScanning();
-    }
-  }, []);
 
   return (
     <>
