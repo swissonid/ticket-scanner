@@ -24,11 +24,11 @@ interface Movie {
 }
 
 const movies: Movie[] = [
-  { id: '1', title: 'The Shawshank Redemption', price: 12.99 },
-  { id: '2', title: 'The Dark Knight', price: 11.99 },
-  { id: '3', title: 'Pulp Fiction', price: 10.99 },
-  { id: '4', title: 'Inception', price: 13.99 },
-  { id: '5', title: 'The Matrix', price: 9.99 },
+  { id: '1', title: 'The Shawshank Redemption', price: 16.0 },
+  { id: '2', title: 'The Dark Knight', price: 12.0 },
+  { id: '3', title: 'Pulp Fiction', price: 15.0 },
+  { id: '4', title: 'Inception', price: 12.0 },
+  { id: '5', title: 'The Matrix', price: 16.0 },
   /*{ id: '6', title: 'Forrest Gump', price: 12.99 },
   {
     id: '7',
@@ -59,7 +59,7 @@ function getTodayFormatted() {
 export default function MovieList() {
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string>('');
+  const [selectedPrice, setSelectedPrice] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);
   const sheetTriggerRef = useRef<HTMLButtonElement>(null);
   const [isPending, startTransition] = useTransition();
@@ -118,7 +118,7 @@ export default function MovieList() {
                 e.stopPropagation();
                 setSelectedMovieId(movie.id);
                 setSelectedMovie(movie);
-                setSelectedTime('');
+                setSelectedPrice(movie.price);
                 setIsOpen(true);
               }}
             >
@@ -134,8 +134,8 @@ export default function MovieList() {
                 </div>
               </div>
               <div className="text-right">
-                <span className="text-sm">Preise</span>
-                <p className="font-semibold">{movie.price.toFixed(2)}</p>
+                <span className="text-sm">Preise (standart Kategorie)</span>
+                <p className="font-semibold">{fromatPrice(movie.price)}</p>
               </div>
             </Label>
           ))}
@@ -179,25 +179,25 @@ export default function MovieList() {
                   {selectedMovie.title}
                 </h3>
 
-                {/*<Label className="text-gray-500">Veranstaltung</Label>
+                <Label className="text-gray-500">Engültiger Preis</Label>
                 <div className="mt-2 flex gap-2">
-                  {['18:00', '20:00', '21:00'].map((time) => (
+                  {[12.0, 15.0, 16.0].map((price) => (
                     <Button
-                      key={time}
-                      variant={selectedTime === time ? 'default' : 'outline'}
-                      onClick={() => setSelectedTime(time)}
+                      key={price}
+                      variant={selectedPrice === price ? 'default' : 'outline'}
+                      onClick={() => setSelectedPrice(price)}
                       className="rounded-full"
                     >
-                      {time}
+                      {fromatPrice(price)}
                     </Button>
                   ))}
-                </div>*/}
+                </div>
               </div>
 
               <div>
                 <Label className="text-gray-500">Preise</Label>
                 <p className="text-2xl font-bold">
-                  CHF {selectedMovie.price.toFixed(2)}
+                  {fromatPrice(selectedPrice)}
                 </p>
               </div>
 
@@ -222,4 +222,8 @@ export default function MovieList() {
       </Sheet>
     </div>
   );
+}
+
+function fromatPrice(price: number): string {
+  return `CHF ${price.toFixed(2)}`;
 }
