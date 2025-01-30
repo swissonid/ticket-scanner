@@ -108,6 +108,10 @@ export function Scanner() {
           className="h-full w-full"
           handleScan={handleScan}
         />
+        <div className="absolute bottom-0 right-0 flex flex-row items-center gap-2 p-4 text-xl font-bold text-white">
+          Z-inema Bern
+          <img src="/zuehlkeLogo.png" width={50} height={50} />
+        </div>
       </CameraViewfinder>
 
       <ResultSheet isOpen={isPending}>
