@@ -76,8 +76,7 @@ export default function MovieList() {
           const result = await redeemVoucher(voucherId);
           console.log(result);
           setIsOpen(false);
-          router.push('/');
-          router.refresh();
+          router.back();
         } catch (error) {
           console.log(error);
           // Handle error (e.g., show an error message)
