@@ -45,6 +45,7 @@ const QrScanner = forwardRef(
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
+
         return true;
       } catch (error) {
         console.error('Error accessing camera:', error);
@@ -171,6 +172,7 @@ const QrScanner = forwardRef(
             className
           )}
           tabIndex={-1} // Ensure the video element is not focusable
+          disableRemotePlayback // Disable Meida Controls on iOS
         />
         <img
           src={capturedFrame ?? undefined}
