@@ -54,7 +54,8 @@ export function Scanner() {
   useEffect(() => {
     console.log('Success go to the movies!!!!');
     if (result?.isValid) {
-      router.push(`/movies?voucherid=${result.voucher.code}`);
+      //router.push(`/movies?voucherid=${result.voucher.code}`);
+      window.location.href = `/movies?voucherid=${result.voucher.code}`;
     }
   }, [result, router]);
 
