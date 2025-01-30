@@ -77,6 +77,7 @@ export default function MovieList() {
           console.log(result);
           setIsOpen(false);
           router.back();
+          router.refresh();
         } catch (error) {
           console.log(error);
           // Handle error (e.g., show an error message)
@@ -89,7 +90,13 @@ export default function MovieList() {
     <div className="flex min-h-screen flex-col bg-gray-50">
       <div className="space-y-6 bg-white p-4">
         <header className="space-y-4">
-          <button className="-ml-2 p-2" onClick={() => router.back()}>
+          <button
+            className="-ml-2 p-2"
+            onClick={() => {
+              router.back();
+              router.refresh();
+            }}
+          >
             <X className="h-6 w-6" />
           </button>
           <h1 className="text-4xl font-bold">Filmauswahl</h1>
