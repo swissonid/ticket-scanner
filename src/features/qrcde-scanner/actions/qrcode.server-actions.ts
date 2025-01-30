@@ -41,6 +41,21 @@ export async function isVoucherValid(
       return result;
     }
 
+    // We never invalidate the powerpoint vouchers so we can make the demo
+    // again and again
+    if (isVoucherAPowerPointVoucher(voucher.code)) {
+      const result = {
+        showError: false,
+        isValid: true,
+        voucher: {
+          ...voucher,
+          isAlreadyUsed: false,
+        },
+      };
+      logResult(result);
+      return result;
+    }
+
     const qrcode = await kv.get<{ isAlreadyUsed: boolean }>(
       voucher.code.toLocaleUpperCase()
     );
@@ -126,4 +141,10 @@ function isQRCodeValid(qrCode: string) {
 
 function logResult(voucherState: VoucherValidateState) {
   console.log(`sende result backe: ${JSON.stringify(voucherState, null, 2)}`);
+}
+
+function isVoucherAPowerPointVoucher(qrCode: string) {
+  const forgroundVoucher = 'PC012576543214950956';
+  const backgroundVoucher = 'PC012512345674950956';
+  return qrCode === forgroundVoucher || qrCode === backgroundVoucher;
 }
