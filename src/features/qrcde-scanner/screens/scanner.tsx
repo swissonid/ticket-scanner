@@ -160,7 +160,7 @@ function VoucherHasError({
   if (!voucherValidateState) return null;
   const { errorMessage } = voucherValidateState;
   return (
-    <div className="flex h-full flex-grow flex-col items-center justify-between">
+    <div className="flex h-full flex-grow flex-col items-center justify-between gap-4">
       <div className="flex flex-col items-center gap-11 pt-8">
         <ErrorIcon />
         <h4 className="text-xl font-bold">
