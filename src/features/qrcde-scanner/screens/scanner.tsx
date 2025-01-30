@@ -56,7 +56,7 @@ export function Scanner() {
     if (result?.isValid) {
       router.push(`/movies?voucherid=${result.voucher.code}`);
     }
-  }, [result]);
+  }, [result, router]);
 
   const handleAudioSwitch = (
     isEnabled: boolean,
