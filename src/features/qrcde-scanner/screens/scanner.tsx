@@ -44,8 +44,6 @@ export function Scanner() {
       const result = await isVoucherValid({
         voucher: voucher,
       });
-
-      restartScanner();
       console.log(`Got from backend ${JSON.stringify(result, null, 2)}`);
       setResult(result);
     });
@@ -121,11 +119,17 @@ export function Scanner() {
 
       <ResultSheet
         isOpen={voucherHasError(result)}
-        onClose={() => setResult(null)}
+        onClose={() => {
+          setResult(null);
+          restartScanner();
+        }}
       >
         <VoucherHasError
           voucherValidateState={result}
-          onOkClicked={() => setResult(null)}
+          onOkClicked={() => {
+            setResult(null);
+            restartScanner();
+          }}
         />
       </ResultSheet>
     </>
